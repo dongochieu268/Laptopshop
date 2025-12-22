@@ -1,8 +1,6 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
         <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
-
-
             <html lang="en">
 
             <head>
@@ -18,24 +16,23 @@
 
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-                <title>Document</title>
+                <title>Update User ${id}</title>
             </head>
 
             <body>
                 <div class="container mt-5">
                     <div class="row">
                         <div class="col-md-6 mx-auto">
-                            <form:form action="/admin/user/create" method="post" modelAttribute="newUser">
+                            <form:form action="/admin/user/update" method="post" modelAttribute="updateUser">
                                 <h1 class="mb-3">Create a user</h1>
                                 <hr>
-                                <div class="mb-3">
-                                    <label class="form-label">Email address</label>
-                                    <form:input type="email" class="form-control" path="email" />
-
+                                <div class="mb-3" style="display: none;">
+                                    <label class="form-label">ID</label>
+                                    <form:input type="number" class="form-control" path="id" />
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Password</label>
-                                    <form:input type="password" class="form-control" path="password" />
+                                    <label class="form-label">Email address</label>
+                                    <form:input type="email" class="form-control" path="email" disabled="true" />
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Phone Number</label>
@@ -49,6 +46,7 @@
                                     <label class="form-label">Address</label>
                                     <form:input type="text" class="form-control" path="address" />
                                 </div>
+
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </form:form>
                         </div>
