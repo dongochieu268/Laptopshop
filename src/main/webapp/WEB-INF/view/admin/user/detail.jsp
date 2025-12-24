@@ -29,37 +29,23 @@
                                 <div class="row">
                                     <div class="col">
                                         <div class="d-flex justify-content-between align-items-center">
-                                            <h1>Table users</h1>
-                                            <a href="/admin/user/create" class="btn btn-primary">Create a user</a>
+                                            <h1>User details with id = ${id}</h1>
                                         </div>
                                         <hr>
-                                        <table class="table table-bordered table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">ID</th>
-                                                    <th scope="col">Email</th>
-                                                    <th scope="col">Full Name</th>
-                                                    <th scope="col">Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <c:forEach var="user" items="${users}">
-                                                    <tr>
-                                                        <th scope="row">${user.id}</th>
-                                                        <td>${user.email}</td>
-                                                        <td>${user.fullName}</td>
-                                                        <td>
-                                                            <a href="/admin/user/${user.id}"
-                                                                class="btn btn-success">View</a>
-                                                            <a href="/admin/user/update/${user.id}"
-                                                                class="btn btn-warning">Update</a>
-                                                            <a href="/admin/user/delete/${user.id}"
-                                                                class="btn btn-danger">Delete</a>
-                                                        </td>
-                                                    </tr>
-                                                </c:forEach>
-                                            </tbody>
-                                        </table>
+                                        <div class="card">
+                                            <div class="card-header">
+                                                User informations
+                                            </div>
+                                            <ul class="list-group list-group-flush">
+                                                <c:set var="user" value="${user}" />
+                                                <li class="list-group-item">ID: ${user.id}</li>
+                                                <li class="list-group-item">Email: ${user.email}</li>
+                                                <li class="list-group-item">Full Name: ${user.fullName}</li>
+                                                <li class="list-group-item">Phone Number: ${user.phone}</li>
+                                                <li class="list-group-item">Adress: ${user.address}</li>
+                                            </ul>
+                                        </div>
+                                        <a href="/admin/user" class="btn btn-success mt-3">Back</a>
                                     </div>
                                 </div>
                             </div>
