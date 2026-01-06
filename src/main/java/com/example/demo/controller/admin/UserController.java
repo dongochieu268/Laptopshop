@@ -1,17 +1,21 @@
 package com.example.demo.controller.admin;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.List;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+
+import com.example.demo.domain.Role;
 import com.example.demo.domain.User;
 import com.example.demo.service.UploadService;
 import com.example.demo.service.UserService;
+
+import jakarta.validation.Valid;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,17 +23,13 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserController {
     private final UserService userService;
     private final UploadService uploadService;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserController(UserService userService, UploadService uploadService) {
+    public UserController(UserService userService, UploadService uploadService,
+            PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.uploadService = uploadService;
-    }
-
-    @RequestMapping("/")
-    public String getHomePage(Model model) {
-        String test = userService.handleHello();
-        model.addAttribute("hieu", test);
-        return "hello";
+        this.passwordEncoder = passwordEncoder;
     }
 
     @RequestMapping("/admin/user")
@@ -46,10 +46,24 @@ public class UserController {
     }
 
     @PostMapping("/admin/user/create")
-    public String createUserPage(Model model, @ModelAttribute("newUser") User newUser1,
+    public String createUserPage(Model model, @ModelAttribute("newUser") @Valid User newUser1,
+            BindingResult newUserBindingResult,
             @RequestParam("avatarFile") MultipartFile file) {
-        // this.userService.handleSaveUser(newUser1);
+
+        List<FieldError> errors = newUserBindingResult.getFieldErrors();
+        for (FieldError error : errors) {
+            System.out.println(error.getField() + " - " + error.getDefaultMessage());
+        }
+        if (newUserBindingResult.hasErrors()) {
+            return "admin/user/create";
+        }
         String avatar = this.uploadService.handleSaveUploadFile(file, "avatar");
+        String hashPassword = this.passwordEncoder.encode(newUser1.getPassword());
+        newUser1.setAvatar(avatar);
+        newUser1.setPassword(hashPassword);
+        Role role = userService.getRoleByName(newUser1.getRole().getName());
+        newUser1.setRole(role);
+        this.userService.handleSaveUser(newUser1);
         return "redirect:/admin/user";
     }
 
